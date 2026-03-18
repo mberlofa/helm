@@ -2,5 +2,7 @@ apiVersion: v2
 name: generic
 description: Generic Helm Chart for Kubernetes workloads
 type: application
+maintainers:
+  - name: mberlofa
 version: 1.1.1
 appVersion: 1.1.1
