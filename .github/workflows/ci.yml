@@ -160,8 +160,15 @@ jobs:
 
       - name: Checkov scan (Helm)
         run: |
-          helm template test-release charts/${{ matrix.chart }} \
-            --output-dir /tmp/rendered-charts
+          CHECKOV_VALUES="charts/${{ matrix.chart }}/ci/checkov-values.yaml"
+          if [ -f "$CHECKOV_VALUES" ]; then
+            helm template test-release charts/${{ matrix.chart }} \
+              -f "$CHECKOV_VALUES" \
+              --output-dir /tmp/rendered-charts
+          else
+            helm template test-release charts/${{ matrix.chart }} \
+              --output-dir /tmp/rendered-charts
+          fi
           checkov --directory /tmp/rendered-charts \
             --framework kubernetes \
             --output cli
