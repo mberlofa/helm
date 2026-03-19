@@ -39,6 +39,7 @@ Recommended reading before installation:
 - [Standalone](docs/standalone.md)
 - [Replication](docs/replication.md)
 - [Replication Operations](docs/replication-operations.md)
+- [HA and Scope Boundaries](docs/ha-and-scope-boundaries.md)
 - [Backup and Restore](docs/backup-restore.md)
 - [Secret Rotation](docs/secret-rotation.md)
 
@@ -53,6 +54,16 @@ Recommended reading before installation:
 - for production needing automatic failover, use a PostgreSQL operator instead of stretching this chart beyond its scope
 - `replication` in this chart means one fixed primary with asynchronous replicas
 - backups remain an operational concern outside this chart and should be implemented with dedicated tooling
+
+## Scope boundary
+
+This chart intentionally stays on the Helm-chart side of the boundary:
+
+- it manages PostgreSQL pods, services, storage, init scripts, metrics, TLS, and basic replication operations
+- it does not attempt to behave like a cluster manager
+- it does not implement automatic failover, leader election, fencing, or reconciliation loops
+
+If you need automated failover, self-healing topology management, switchover workflows, or lifecycle orchestration across primary and replicas, use a PostgreSQL operator instead of extending this chart into that territory.
 
 ## Quick start
 
@@ -147,6 +158,7 @@ metrics:
 Operational documents:
 
 - [Replication Operations](docs/replication-operations.md)
+- [HA and Scope Boundaries](docs/ha-and-scope-boundaries.md)
 - [Backup and Restore](docs/backup-restore.md)
 - [Secret Rotation](docs/secret-rotation.md)
 

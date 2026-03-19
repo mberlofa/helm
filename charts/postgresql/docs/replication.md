@@ -25,6 +25,7 @@ Typical use cases:
 - primary re-election
 - synchronous replication guarantees
 - connection pooling
+- operator-style topology management
 
 ## Operational requirements
 
@@ -40,6 +41,7 @@ Typical use cases:
 - route write traffic only to the primary Service
 - route read traffic only to the replicas Service
 - treat this mode as read scaling plus recovery help, not full HA
+- if automated failover is a hard requirement, use an operator instead of extending this chart
 
 ## Example
 
