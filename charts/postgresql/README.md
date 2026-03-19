@@ -25,6 +25,7 @@ helm install postgresql oci://ghcr.io/mberlofa/helm/postgresql -f values.yaml
 - fixed-primary asynchronous replication with `pg_basebackup`
 - optional metrics through `postgres_exporter`
 - optional `ServiceMonitor`
+- dedicated metrics Services separated from client traffic
 - topology-specific Services for client traffic, primary traffic, and read replicas
 
 ## How to choose the architecture
@@ -119,7 +120,14 @@ metrics:
 
 - enable `metrics.enabled=true` in monitored environments
 - enable `metrics.serviceMonitor.enabled=true` when Prometheus Operator is available
+- metrics are exposed through dedicated metrics Services, not through the client database Services
 - monitor connection count, replication lag, disk growth, checkpoint behavior, and WAL retention
+
+### Configuration UX
+
+- use `config.preset` for a small set of opinionated PostgreSQL defaults
+- use `config.pgHbaEntries` when you need structured host-based access rules
+- keep `config.postgresql` and `config.pgHba` for raw overrides when structured values are not enough
 
 ## Production notes
 
@@ -148,11 +156,16 @@ Operational documents:
 | `auth.username` | App user created at bootstrap | `app` |
 | `auth.existingSecret` | Existing secret for passwords | `""` |
 | `auth.replicationUsername` | Replication username | `replicator` |
+| `config.preset` | Optional PostgreSQL config preset | `none` |
+| `config.pgHbaEntries` | Structured pg_hba entries | `[]` |
 | `initdb.existingConfigMap` | External ConfigMap for extra init scripts | `""` |
 | `tls.enabled` | Enable PostgreSQL TLS | `false` |
 | `tls.existingSecret` | Existing secret with TLS material | `""` |
 | `tls.sslMode` | Internal libpq sslmode | `require` |
 | `networkPolicy.enabled` | Enable ingress-only NetworkPolicy | `false` |
+| `livenessProbe.enabled` | Enable livenessProbe | `true` |
+| `readinessProbe.enabled` | Enable readinessProbe | `true` |
+| `startupProbe.enabled` | Enable startupProbe | `true` |
 | `standalone.persistence.enabled` | Enable PVC for standalone | `true` |
 | `replication.readReplicas.replicaCount` | Number of async read replicas | `2` |
 | `metrics.enabled` | Enable `postgres_exporter` sidecar | `false` |
@@ -173,6 +186,8 @@ The `ci/` scenarios validate the main chart behaviors:
 - `scheduling.yaml`
 - `tls.yaml`
 - `tls-networkpolicy.yaml`
+- `config-preset.yaml`
+- `structured-pghba.yaml`
 
 ## Examples
 
@@ -182,6 +197,7 @@ See `examples/`:
 - `replication.yaml`
 - `initdb-metrics.yaml`
 - `tls.yaml`
+- `structured-config.yaml`
 
 ## Important notes
 

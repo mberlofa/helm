@@ -63,8 +63,18 @@ auth:
 # =============================================================================
 
 config:
+  # -- Optional configuration preset: none | small | medium | large
+  preset: none
   # -- Extra postgresql.conf content appended to the generated configuration
   postgresql: ""
+  # -- Structured pg_hba.conf entries appended after the generated defaults
+  pgHbaEntries: []
+    # - type: host
+    #   database: app
+    #   user: app
+    #   address: 10.0.0.0/8
+    #   method: scram-sha-256
+    #   options: ""
   # -- Extra pg_hba.conf content appended to the generated host-based authentication rules
   pgHba: ""
 
@@ -151,6 +161,13 @@ replication:
       size: 20Gi
     # -- Resources for read replica pods
     resources: {}
+  wal:
+    # -- WAL retention kept locally for replicas and recovery workflows
+    keepSize: 512MB
+    # -- Maximum WAL sender processes
+    maxSenders: 10
+    # -- Maximum replication slots
+    maxReplicationSlots: 10
 
 # =============================================================================
 # Service
@@ -174,6 +191,9 @@ service:
 metrics:
   # -- Enable postgres_exporter sidecar
   enabled: false
+  service:
+    # -- Annotations applied to metrics Services
+    annotations: {}
   image:
     # -- postgres_exporter image repository
     repository: quay.io/prometheuscommunity/postgres-exporter
@@ -228,22 +248,28 @@ serviceAccount:
 # =============================================================================
 
 livenessProbe:
+  # -- Enable livenessProbe
+  enabled: true
   initialDelaySeconds: 30
   periodSeconds: 15
   timeoutSeconds: 5
   failureThreshold: 6
 
 readinessProbe:
+  # -- Enable readinessProbe
+  enabled: true
   initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
 
 startupProbe:
+  # -- Enable startupProbe
+  enabled: true
   initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 5
-  failureThreshold: 30
+  failureThreshold: 60
 
 # =============================================================================
 # Scheduling and Security

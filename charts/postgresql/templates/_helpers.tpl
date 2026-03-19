@@ -84,6 +84,18 @@ app.kubernetes.io/role: {{ .role }}
 {{- printf "%s-replicas" (include "postgresql.fullname" .) -}}
 {{- end -}}
 
+{{- define "postgresql.metricsServiceName" -}}
+{{- printf "%s-metrics" (include "postgresql.fullname" .) -}}
+{{- end -}}
+
+{{- define "postgresql.primaryMetricsServiceName" -}}
+{{- printf "%s-primary-metrics" (include "postgresql.fullname" .) -}}
+{{- end -}}
+
+{{- define "postgresql.replicasMetricsServiceName" -}}
+{{- printf "%s-replicas-metrics" (include "postgresql.fullname" .) -}}
+{{- end -}}
+
 {{- define "postgresql.primaryHeadlessServiceName" -}}
 {{- printf "%s-primary-headless" (include "postgresql.fullname" .) -}}
 {{- end -}}
@@ -166,6 +178,34 @@ app.kubernetes.io/role: {{ .role }}
     secretKeyRef:
       name: {{ include "postgresql.secretName" . }}
       key: {{ .Values.auth.existingSecretPostgresPasswordKey }}
+{{- end -}}
+
+{{- define "postgresql.configPreset" -}}
+{{- if eq .Values.config.preset "small" -}}
+max_connections = 100
+shared_buffers = '256MB'
+effective_cache_size = '768MB'
+work_mem = '4MB'
+maintenance_work_mem = '64MB'
+{{- else if eq .Values.config.preset "medium" -}}
+max_connections = 200
+shared_buffers = '512MB'
+effective_cache_size = '1536MB'
+work_mem = '8MB'
+maintenance_work_mem = '128MB'
+{{- else if eq .Values.config.preset "large" -}}
+max_connections = 400
+shared_buffers = '1GB'
+effective_cache_size = '3GB'
+work_mem = '16MB'
+maintenance_work_mem = '256MB'
+{{- end -}}
+{{- end -}}
+
+{{- define "postgresql.pgHbaEntries" -}}
+{{- range .Values.config.pgHbaEntries }}
+{{ .type | default "host" }} {{ .database | default "all" }} {{ .user | default "all" }} {{ .address | default "0.0.0.0/0" }} {{ .method | default "scram-sha-256" }}{{- if .options }} {{ .options }}{{- end }}
+{{- end -}}
 {{- end -}}
 
 {{- define "postgresql.volumeClaimTemplate" -}}
