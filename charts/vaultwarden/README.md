@@ -171,7 +171,6 @@ Official reference:
 - v1 does not claim HA
 - this chart now supports `sqlite`, external database configuration, and optional local PostgreSQL or MySQL subcharts
 - production should normally prefer `database.external`
-- PostgreSQL or MySQL modes still require `/data` backup in addition to database backup
 - SSO and OIDC remain advanced integration topics; this chart documents them but does not model them as first-class values in v2
 - SMTP in production should use explicit timeout, security mode, and certificate validation choices instead of relying on provider defaults you did not document
 - built-in backup is now available directly in the chart and should be preferred over ad-hoc sidecar or detached copy jobs for this product line
@@ -179,7 +178,6 @@ Official reference:
 - part of the effective runtime configuration can be persisted in `/data/config.json`
 - backup and restore must treat `/data` as a full state boundary, not only a SQLite file
 - for detached backup automation, validate your PVC access pattern before assuming a separate backup pod can mount the same claim safely
-- the best fit in this repository is a companion backup release with the `generic` chart when your storage semantics allow it
 - if a restore uses pre-provisioned storage, validate `existingClaim` or PVC selector behavior before starting traffic
 - review [Scope and Automation Boundaries](docs/scope-and-automation-boundaries.md) before expecting this chart to behave like an operator or HA platform
 
