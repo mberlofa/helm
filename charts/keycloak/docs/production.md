@@ -33,7 +33,7 @@ Use `mode: production` for real reverse-proxy deployments where Keycloak is back
 - review [Security and Trust](security-and-trust.md) when database TLS or private CAs are involved
 - review [Extensions and Themes](extensions-and-themes.md) before mounting providers, themes, or sidecars
 - review [Scope and Automation Boundaries](scope-and-automation-boundaries.md) before treating the chart like an operator or autoscaling control plane
-- review [Production Capacity](production-capacity.md) before choosing resources and `priorityClassName`
+- review [Production Capacity](production-capacity.md) before choosing explicit `resources` and `priorityClassName`
 
 ## Operational notes
 

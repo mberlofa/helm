@@ -288,35 +288,6 @@ topologySpreadConstraints:
 {{- if and (gt (int .Values.replicaCount) 1) .Values.cache.multiReplicaDefaults.enabled .Values.cache.multiReplicaDefaults.topologySpread.enabled -}}true{{- end -}}
 {{- end -}}
 
-{{- define "keycloak.resources" -}}
-{{- if .Values.resources }}
-{{- toYaml .Values.resources }}
-{{- else if eq .Values.resourcesPreset "small" }}
-requests:
-  cpu: 500m
-  memory: 1Gi
-limits:
-  cpu: "1"
-  memory: 2Gi
-{{- else if eq .Values.resourcesPreset "medium" }}
-requests:
-  cpu: "1"
-  memory: 2Gi
-limits:
-  cpu: "2"
-  memory: 4Gi
-{{- else if eq .Values.resourcesPreset "large" }}
-requests:
-  cpu: "2"
-  memory: 4Gi
-limits:
-  cpu: "4"
-  memory: 8Gi
-{{- else }}
-{}
-{{- end }}
-{{- end -}}
-
 {{- define "keycloak.probeValue" -}}
 {{- $root := .root -}}
 {{- $probe := .probe -}}

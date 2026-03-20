@@ -334,8 +334,6 @@ serviceAccount:
 # Resources and Security
 # =============================================================================
 
-# -- Resource preset for the main Keycloak container when resources is empty: `"" | small | medium | large`
-resourcesPreset: ""
 resources: {}
 
 podSecurityContext:

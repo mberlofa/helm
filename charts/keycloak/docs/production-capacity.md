@@ -6,57 +6,14 @@ Read this guide before choosing CPU, memory, and scheduling priority for a produ
 
 ## Current chart model
 
-The chart supports two ways to size the main Keycloak container:
+The chart leaves container sizing entirely under operator control through explicit `resources`.
 
-- explicit `resources`
-- opinionated `resourcesPreset`
+Default behavior:
 
-If `resources` is set, it always wins.
+- if `resources` is not set, the chart renders with `resources: {}`
+- no CPU or memory requests/limits are imposed by default
 
-If `resources` is empty, the chart can apply one of these presets:
-
-- `small`
-- `medium`
-- `large`
-
-## Preset intent
-
-`small`
-
-- small production environments
-- lower login concurrency
-- simpler extension footprint
-
-`medium`
-
-- general production baseline
-- moderate concurrency
-- common reverse-proxy and monitoring setup
-
-`large`
-
-- heavier concurrency
-- larger memory footprint
-- more demanding production environments
-
-These presets are not universal truth. They are starting points that reduce manual repetition in stricter platforms.
-
-## Preset values
-
-`small`
-
-- requests: `500m` CPU, `1Gi` memory
-- limits: `1` CPU, `2Gi` memory
-
-`medium`
-
-- requests: `1` CPU, `2Gi` memory
-- limits: `2` CPU, `4Gi` memory
-
-`large`
-
-- requests: `2` CPU, `4Gi` memory
-- limits: `4` CPU, `8Gi` memory
+This keeps capacity decisions aligned with the real platform and workload instead of hiding them behind presets.
 
 ## Priority class
 
@@ -75,7 +32,13 @@ Do not set a high-priority class casually. Priority must be aligned with the res
 For a serious production environment, a reasonable starting point is:
 
 ```yaml
-resourcesPreset: medium
+resources:
+  requests:
+    cpu: "1"
+    memory: 2Gi
+  limits:
+    cpu: "2"
+    memory: 4Gi
 priorityClassName: platform-critical
 ```
 
@@ -94,6 +57,6 @@ This gives the pod more time to bootstrap before startup and readiness failures 
 
 ## Final recommendation
 
-- start with `resourcesPreset` only if the platform benefits from a consistent baseline
-- move to explicit `resources` once real production telemetry is available
+- start with explicit `resources` based on expected concurrency and extension footprint
+- refine those values with real production telemetry
 - keep `priorityClassName` aligned with cluster policy, not with guesswork

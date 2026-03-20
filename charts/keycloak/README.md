@@ -120,7 +120,7 @@ database:
 - do not use `dev` mode as a hidden production shortcut
 - review [Scaling and Clustering](docs/scaling-and-clustering.md) before raising `replicaCount`
 - review [Scope and Automation Boundaries](docs/scope-and-automation-boundaries.md) before asking the chart to solve autoscaling or operator-style concerns
-- review [Production Capacity](docs/production-capacity.md) before choosing resources and `priorityClassName`
+- review [Production Capacity](docs/production-capacity.md) before choosing explicit `resources` and `priorityClassName`
 
 ### Realm import and extensions
 
@@ -179,7 +179,7 @@ database:
 | `cache.stack` | Cache stack for multi-replica production | `jdbc-ping` |
 | `cache.multiReplicaDefaults.enabled` | Apply default scheduling hints for multi-replica workloads | `true` |
 | `cache.multiReplicaDefaults.podAntiAffinity` | Generated pod anti-affinity mode | `preferred` |
-| `resourcesPreset` | Main container resource preset | `""` |
+| `resources` | Explicit CPU and memory requests/limits for the main container | `{}` |
 | `probes.liveness.enabled` | Enable liveness probe | `true` |
 | `probes.readiness.enabled` | Enable readiness probe | `true` |
 | `probes.startup.enabled` | Enable startup probe | `true` |
