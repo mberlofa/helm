@@ -172,11 +172,14 @@ database:
 | `probes.liveness.enabled` | Enable liveness probe | `true` |
 | `probes.readiness.enabled` | Enable readiness probe | `true` |
 | `probes.startup.enabled` | Enable startup probe | `true` |
+<<<<<<< HEAD
 | `extensions.providers.rolloutToken` | Manual rollout token for provider source changes | `""` |
 | `extensions.themes.rolloutToken` | Manual rollout token for theme source changes | `""` |
 | `extraEnvFrom` | Extra envFrom sources injected into the main container | `[]` |
 | `initContainers` | Additional init containers | `[]` |
 | `extraContainers` | Additional sidecars or helper containers | `[]` |
+=======
+>>>>>>> origin/main
 | `realmImport.enabled` | Enable startup realm import | `false` |
 | `ingress.public.enabled` | Enable public ingress for Keycloak | `false` |
 | `ingress.public.ingressClassName` | Public ingress class name | `traefik` |
