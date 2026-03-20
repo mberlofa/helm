@@ -55,6 +55,52 @@ helm install vaultwarden oci://ghcr.io/mberlofa/helm/vaultwarden -f values.yaml
 - keep signups disabled unless the instance is intended for self-service use
 - prefer a hashed `ADMIN_TOKEN` value
 - expose the admin panel carefully and only behind trusted access patterns
+- keep `showPasswordHint=false` on publicly reachable deployments
+- review `orgCreationUsers`, `orgEventsEnabled`, and `emergencyAccessAllowed` instead of relying on product defaults you did not document
+
+### Important mapped settings
+
+This chart intentionally maps the most important operational settings from the official Vaultwarden environment model:
+
+- `DOMAIN`
+- `SIGNUPS_ALLOWED`
+- `SIGNUPS_VERIFY`
+- `SIGNUPS_DOMAINS_WHITELIST`
+- `INVITATIONS_ALLOWED`
+- `SENDS_ALLOWED`
+- `EMERGENCY_ACCESS_ALLOWED`
+- `EMAIL_CHANGE_ALLOWED`
+- `ORG_EVENTS_ENABLED`
+- `ORG_CREATION_USERS`
+- `PASSWORD_HINTS_ALLOWED`
+- `SHOW_PASSWORD_HINT`
+- `ENABLE_WEBSOCKET`
+- `ADMIN_TOKEN`
+- `SMTP_*`
+
+For advanced settings that are not first-class values in this chart yet, use `extraEnv` and keep the official template nearby:
+
+- https://raw.githubusercontent.com/dani-garcia/vaultwarden/main/.env.template
+
+### Admin token guidance
+
+The admin page should not use a plain-text `ADMIN_TOKEN` in real environments. Prefer an Argon2 PHC string.
+
+Simple generation options:
+
+```bash
+docker run --rm -it vaultwarden/server:1.35.4 /vaultwarden hash
+```
+
+```bash
+echo -n 'change-me' | argon2 "$(openssl rand -base64 32)" -e -id -k 65540 -t 3 -p 4
+```
+
+Use the resulting PHC string directly in `admin.token` or store it in `admin.existingSecret`.
+
+Official reference:
+
+- https://github.com/dani-garcia/vaultwarden/wiki/Enabling-admin-page#secure-the-admin_token
 
 ## Production notes
 
@@ -71,8 +117,16 @@ helm install vaultwarden oci://ghcr.io/mberlofa/helm/vaultwarden -f values.yaml
 | `image.tag` | Vaultwarden image tag | `1.35.4` |
 | `domain` | Public Vaultwarden domain | `""` |
 | `vaultwarden.signupsAllowed` | Allow new user signups | `false` |
+| `vaultwarden.signupsVerify` | Require email verification for new signups | `false` |
+| `vaultwarden.signupsDomainsWhitelist` | Signup allowlist when signups are generally disabled | `[]` |
 | `vaultwarden.invitationsAllowed` | Allow invitation flows | `true` |
 | `vaultwarden.sendsAllowed` | Allow Bitwarden Send | `true` |
+| `vaultwarden.emergencyAccessAllowed` | Allow emergency access features | `true` |
+| `vaultwarden.emailChangeAllowed` | Allow users to change their email | `true` |
+| `vaultwarden.orgEventsEnabled` | Enable organization event logging | `false` |
+| `vaultwarden.orgCreationUsers` | Which users may create organizations | `""` |
+| `vaultwarden.passwordHintsAllowed` | Allow password hints | `true` |
+| `vaultwarden.showPasswordHint` | Show password hints directly in the web UI | `false` |
 | `vaultwarden.websocket.enabled` | Enable websocket notifications | `true` |
 | `admin.token` | Inline admin token | `""` |
 | `admin.existingSecret` | Existing secret containing the admin token | `""` |

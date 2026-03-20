@@ -59,10 +59,30 @@ spec:
               value: {{ .Values.domain | quote }}
             - name: SIGNUPS_ALLOWED
               value: {{ ternary "true" "false" .Values.vaultwarden.signupsAllowed | quote }}
+            - name: SIGNUPS_VERIFY
+              value: {{ ternary "true" "false" .Values.vaultwarden.signupsVerify | quote }}
+            {{- with .Values.vaultwarden.signupsDomainsWhitelist }}
+            - name: SIGNUPS_DOMAINS_WHITELIST
+              value: {{ join "," . | quote }}
+            {{- end }}
             - name: INVITATIONS_ALLOWED
               value: {{ ternary "true" "false" .Values.vaultwarden.invitationsAllowed | quote }}
             - name: SENDS_ALLOWED
               value: {{ ternary "true" "false" .Values.vaultwarden.sendsAllowed | quote }}
+            - name: EMERGENCY_ACCESS_ALLOWED
+              value: {{ ternary "true" "false" .Values.vaultwarden.emergencyAccessAllowed | quote }}
+            - name: EMAIL_CHANGE_ALLOWED
+              value: {{ ternary "true" "false" .Values.vaultwarden.emailChangeAllowed | quote }}
+            - name: ORG_EVENTS_ENABLED
+              value: {{ ternary "true" "false" .Values.vaultwarden.orgEventsEnabled | quote }}
+            {{- if .Values.vaultwarden.orgCreationUsers }}
+            - name: ORG_CREATION_USERS
+              value: {{ .Values.vaultwarden.orgCreationUsers | quote }}
+            {{- end }}
+            - name: PASSWORD_HINTS_ALLOWED
+              value: {{ ternary "true" "false" .Values.vaultwarden.passwordHintsAllowed | quote }}
+            - name: SHOW_PASSWORD_HINT
+              value: {{ ternary "true" "false" .Values.vaultwarden.showPasswordHint | quote }}
             - name: ENABLE_WEBSOCKET
               value: {{ ternary "true" "false" .Values.vaultwarden.websocket.enabled | quote }}
             - name: LOG_LEVEL
