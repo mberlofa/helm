@@ -5,6 +5,7 @@ type: application
 version: 1.7.2
 appVersion: "1.35.4"
 maintainers:
+  - name: helmforgedev
   - name: mberlofa
 keywords:
   - vaultwarden
@@ -19,9 +20,9 @@ icon: https://github.com/dani-garcia/vaultwarden/raw/main/resources/vaultwarden-
 dependencies:
   - name: postgresql
     version: 1.5.1
-    repository: oci://ghcr.io/helmforgedev/helm
+    repository: oci://ghcr.io/helmforgedev/charts
     condition: postgresql.enabled
   - name: mysql
     version: 1.4.1
-    repository: oci://ghcr.io/helmforgedev/helm
+    repository: oci://ghcr.io/helmforgedev/charts
     condition: mysql.enabled
