@@ -29,6 +29,7 @@ helm install vaultwarden oci://ghcr.io/mberlofa/helm/vaultwarden -f values.yaml
 - [Data Restore Patterns](docs/data-restore-patterns.md)
 - [Admin Access and Hardening](docs/admin-access-and-hardening.md)
 - [SSO and OIDC Guidance](docs/sso-and-oidc.md)
+- [Scope and Automation Boundaries](docs/scope-and-automation-boundaries.md)
 - [Runtime Configuration and config.json](docs/runtime-configuration-and-config-json.md)
 
 ## Operational direction
@@ -169,6 +170,7 @@ Official reference:
 - for detached backup automation, validate your PVC access pattern before assuming a separate backup pod can mount the same claim safely
 - the best fit in this repository is a companion backup release with the `generic` chart when your storage semantics allow it
 - if a restore uses pre-provisioned storage, validate `existingClaim` or PVC selector behavior before starting traffic
+- review [Scope and Automation Boundaries](docs/scope-and-automation-boundaries.md) before expecting this chart to behave like an operator or HA platform
 
 ## Main values
 
