@@ -128,21 +128,21 @@ ingress:
 probes:
   startup:
     enabled: true
-    path: /api/v1/actuator/health
+    path: /
     initialDelaySeconds: 15
     periodSeconds: 5
     timeoutSeconds: 3
     failureThreshold: 30
   liveness:
     enabled: true
-    path: /api/v1/actuator/health
+    path: /
     initialDelaySeconds: 0
     periodSeconds: 15
     timeoutSeconds: 5
     failureThreshold: 3
   readiness:
     enabled: true
-    path: /api/v1/actuator/health
+    path: /
     initialDelaySeconds: 0
     periodSeconds: 10
     timeoutSeconds: 5

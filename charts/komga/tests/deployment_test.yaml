@@ -134,13 +134,13 @@ tests:
     asserts:
       - equal:
           path: spec.template.spec.containers[0].startupProbe.httpGet.path
-          value: /api/v1/actuator/health
+          value: /
 
   - it: should render liveness probe
     asserts:
       - equal:
           path: spec.template.spec.containers[0].livenessProbe.httpGet.path
-          value: /api/v1/actuator/health
+          value: /
 
   - it: should set custom timezone
     set:
