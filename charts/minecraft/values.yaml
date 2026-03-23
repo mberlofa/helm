@@ -375,8 +375,9 @@ backup:
 
   images:
     # -- Image used for RCON commands and tar archiving
-    rcon: itzg/rcon-cli:1.6
-    # -- Image used for S3 upload
+    # -- Image used for RCON commands and tar archiving (must have sh, tar, and rcon-cli)
+    worker: itzg/minecraft-server:latest
+    # -- Image used for S3 upload (MinIO client)
     uploader: minio/mc:latest
 
   # -- Resources for backup containers

@@ -36,7 +36,7 @@ spec:
           restartPolicy: Never
           initContainers:
             - name: pre-backup
-              image: {{ .Values.backup.images.rcon }}
+              image: {{ .Values.backup.images.worker }}
               command: ["/bin/sh", "/scripts/pre-backup.sh"]
               env:
                 - name: RCON_HOST
@@ -57,7 +57,7 @@ spec:
                   mountPath: /scripts
                   readOnly: true
             - name: archive
-              image: {{ .Values.backup.images.rcon }}
+              image: {{ .Values.backup.images.worker }}
               command: ["/bin/sh", "/scripts/archive-backup.sh"]
               env:
                 - name: BACKUP_ARCHIVE_PREFIX
@@ -107,7 +107,7 @@ spec:
                 - name: backup-workdir
                   mountPath: /backup/out
             - name: post-backup
-              image: {{ .Values.backup.images.rcon }}
+              image: {{ .Values.backup.images.worker }}
               command: ["/bin/sh", "/scripts/post-backup.sh"]
               env:
                 - name: RCON_HOST

@@ -22,6 +22,12 @@ spec:
       {{- if and (eq .Values.service.type "NodePort") .Values.service.nodePort }}
       nodePort: {{ .Values.service.nodePort }}
       {{- end }}
+    {{- if .Values.rcon.enabled }}
+    - name: rcon
+      port: {{ .Values.rcon.port }}
+      targetPort: rcon
+      protocol: TCP
+    {{- end }}
     {{- if .Values.geyser.enabled }}
     - name: bedrock
       port: {{ .Values.geyser.port }}
